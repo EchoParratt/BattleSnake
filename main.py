@@ -22,7 +22,7 @@ def info() -> typing.Dict:
 
     return {
         "apiversion": "1",
-        "author": "",  # TODO: Your Battlesnake Username
+        "Leafer777": "",  # TODO: Your Battlesnake Username
         "color": "#888888",  # TODO: Choose color
         "head": "default",  # TODO: Choose head
         "tail": "default",  # TODO: Choose tail
@@ -63,14 +63,43 @@ def move(game_state: typing.Dict) -> typing.Dict:
         is_move_safe["up"] = False
 
     # TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
-    # board_width = game_state['board']['width']
-    # board_height = game_state['board']['height']
+    board_width = game_state['board']['width']
+    board_height = game_state['board']['height']
+    if my_head['x'] <= 0:
+        is_move_safe['left'] = False
+    if my_head['x'] >= board_width - 1:
+        is_move_safe['right'] = False
+    if my_head['y'] <= 0:
+        is_move_safe['down'] = False
+    if my_head['y'] >= board_height - 1:
+        is_move_safe['up'] = False
 
     # TODO: Step 2 - Prevent your Battlesnake from colliding with itself
-    # my_body = game_state['you']['body']
+    my_body = game_state['you']['body']
+    next_pos_up = {"x": my_head["x"], "y": my_head["y"] + 1}
+    next_pos_down = {"x": my_head["x"], "y": my_head["y"] - 1}
+    next_pos_left = {"x": my_head["x"] - 1, "y": my_head["y"]}
+    next_pos_right = {"x": my_head["x"] + 1, "y": my_head["y"]} 
+
+    if next_pos_up in my_body:
+        is_move_safe['up'] = False
+    if next_pos_down in my_body:
+        is_move_safe['down'] = False
+    if next_pos_left in my_body:  
+        is_move_safe['left'] = False
+    if next_pos_right in my_body:
+      is_move_safe["right"] = False
 
     # TODO: Step 3 - Prevent your Battlesnake from colliding with other Battlesnakes
-    # opponents = game_state['board']['snakes']
+    opponents = game_state['board']['snakes']
+    if next_pos_up in opponents:
+      is_move_safe["up"] = False
+    if next_pos_down in opponents:
+      is_move_safe["down"] = False  
+    if next_pos_left in opponents:
+      is_move_safe["left"] = False
+    if next_pos_right in opponents:
+      is_move_safe["right"] = False
 
     # Are there any safe moves left?
     safe_moves = []
